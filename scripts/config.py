@@ -1,15 +1,17 @@
 '''
-This script contains all user inputs variables necessary for the ENTSO-E API request
+This script contains all user inputs variables necessary
 > For specific country codes and timezones visit: https://github.com/EnergieID/entsoe-py/blob/master/entsoe/mappings.py
 '''
+from pathlib import Path
 
+# variable for global project root path
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+# variables for ENTSO-E API requests
 START_DATE = '20150101'
-END_DATE = '20150115'
-
+END_DATE = '20150115' 
 COUNTRY_CODE = 'IT'
-
 TIMEZONE = 'Europe/Rome'
-
 ZONES = [
     'IT_NORD'
     #'IT_CNOR',
@@ -20,6 +22,7 @@ ZONES = [
     #'IT_SARD'
 ]
 
+# other
 GENERATION_TYPES = {
     'solar': 'Solar',
     'wind': 'Wind Onshore',
@@ -31,4 +34,5 @@ GENERATION_TYPES = {
     'oil': 'Fossil Oil',
 }
 
+# terminal message for user
 print('msg: "config.py" executed')
