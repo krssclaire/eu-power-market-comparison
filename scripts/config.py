@@ -35,4 +35,4 @@ GENERATION_TYPES = {
 }
 
 # terminal message for user
-print('msg: "config.py" executed')
+print('MSG: "config.py" executed')

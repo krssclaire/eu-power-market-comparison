@@ -1,3 +1,8 @@
+# permanent to ignore
 .venv
+.env
 dataset/raw
+
+# temporary to ignore
 entso-eda.ipynb
+entsoe_data.csv

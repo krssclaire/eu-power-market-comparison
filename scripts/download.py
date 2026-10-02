@@ -12,6 +12,10 @@ import os
 import pandas as pd
 from pathlib import Path
 from scripts import config
+import time
+
+# script start time execution
+start = time.time()
 
 # access entsoe data through protected API_KEY
 load_dotenv()
@@ -48,3 +52,7 @@ for country_code in country_codes:
     print(f'Saved {country_code} LOAD data into{raw_dataset_path}')
     generation.to_csv(f'{raw_dataset_path}/generation/{country_code}-generation.csv')
     print(f'Saved {country_code} GENERATION data into{raw_dataset_path}')
+
+# SCRIPT PERFORMANCE --> time should depend on the amount of data retrieved
+end = time.time()
+print(f'Execution time: {end - start}')
