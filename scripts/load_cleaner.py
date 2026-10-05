@@ -1,5 +1,5 @@
 '''
-Applis a data cleaning process to the load ENTSO-E collected raw data
+Applies a data cleaning process to the load ENTSO-E collected raw data
 '''
 
 # import libraries
@@ -101,22 +101,6 @@ def clean_load(zone):
     
     return df
     
-# EXPORT
-def export_table(df, zone, var_type='load'):
-    '''
-    Exports the cleanes dataset to the corresponding clean data folder    
-    '''
-    # define clean dataset path
-    output_path = PROJECT_ROOT / 'dataset' / 'clean' / f'{var_type}'
-
-    # create folder if non-existent
-    output_path.mkdir(parents=True, exist_ok=True)
-
-    # save in CSV format
-    df.to_csv(output_path / f'{zone}-{var_type}.csv', index=False)
-
-    print(f'MSG: {var_type} cleaned data exported to {output_path}')
-
 # EXECUTION
 if __name__ == '__main__':
     # script start time execution
@@ -127,7 +111,7 @@ if __name__ == '__main__':
         # clean zonal prices
         load = clean_load(zone)
         # export cleaned zonal load
-        export_table(load, zone)
+        export_table(load, zone, var_type='load')
 
     # scripts end time execution
     end = time.time()

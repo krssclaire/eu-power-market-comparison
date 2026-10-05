@@ -84,7 +84,7 @@ def to_hourly(df, datetime_col='datetime', value_cols=None):
 
 
 # EXPORT
-def export_table(df, zone, var_type='prices'):
+def export_table(df, zone, var_type):
     '''
     Exports the cleanes dataset to the corresponding clean data folder    
     '''

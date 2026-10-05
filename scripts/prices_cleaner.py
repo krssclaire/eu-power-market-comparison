@@ -116,7 +116,7 @@ if __name__ == '__main__':
         # clean zonal prices
         prices = clean_prices(zone)
         # export cleaned zonal prices
-        export_table(prices, zone)
+        export_table(prices, zone, var_type='prices')
 
     # scripts end time execution
     end = time.time()
