@@ -6,15 +6,27 @@ Applies a data cleaning process to the generation ENTSO-E collected raw data
 import pandas as pd
 import time
 from config import *
-from cleaning_utils import (
-    load_raw_data,
-    convert_datetime,
-    check_input_frequency,
-    export_table
-)
 
 # define raw dataset path
 raw_dataset_path = PROJECT_ROOT / 'dataset' / 'raw' / 'entsoe'
+
+# LOADING
+def load_raw_data(raw_data_path, dataset_type, zone, year):
+    '''
+    Loads the raw ENTSO-E dataset corresponding to the selected variable 
+    type, bidding zone and year
+    '''
+    # read csv file from specific folder
+    df = pd.read_csv(
+        raw_data_path 
+        / f'{dataset_type}' 
+        / f'{zone}'
+        / f'{zone}-{year}-{dataset_type}.csv'
+    )
+
+    print(f'MSG: {dataset_type} data loaded')
+
+    return df
 
 # TRANSFORMATION
 def standardize_generation_columns(df, zone):
@@ -31,16 +43,51 @@ def standardize_generation_columns(df, zone):
 
     return standardized_generation_df
 
+def convert_datetime(df, datetime_col='datetime'):
+    '''
+    Converts the datetime column after renaming process, in order to 
+    correctly treat the datetime data type
+    '''
+    # convert datetime column to its correct datatype
+    df = df.copy()
+    df[datetime_col] = pd.to_datetime(
+        df[datetime_col], 
+        utc=True
+    )
+
+    timezone = df[datetime_col].dt.tz
+
+    print(f'MSG: date column converted to datetime in {timezone} time zone')
+    
+    return df
+
+def check_input_frequency(df):
+    '''
+    Checks if each hour has four quart-hourly observations
+    '''
+    hourly_counts = (
+        df
+        .set_index('datetime')
+        .resample('h')
+        .size()
+    )
+
+    print(f'Number of observations per hour: {hourly_counts.value_counts().sort_index()}')
+
+
 def gen_to_hourly(df, datetime_col, cols=None):
     '''
-    Converts quarterly-hour data to hourly granularity.
-    If an hour has incomplete data, that hour is set to NA
+    Converts quarterly-hour data to hourly granularity
     '''
     if cols is None:
         raise ValueError('Columns must be specified')
 
     df = df.copy()
-    df[datetime_col] = pd.to_datetime(df[datetime_col])
+    # convert datetime to correct datatype
+    df[datetime_col] = pd.to_datetime(df[datetime_col], utc=True)
+
+    # convert generation columns to correct datatype
+    df[cols] = df[cols].apply(pd.to_numeric, errors='coerce')
 
     # get missing values percentage per columns
     missing_pct = (
@@ -65,7 +112,6 @@ def gen_to_hourly(df, datetime_col, cols=None):
 
     return hourly
 
-# generation = generation_data.columns[1:]
 
 # VALIDATION
 def validate_generation(df, datetime_col, generation_cols):
@@ -94,12 +140,27 @@ def validate_generation(df, datetime_col, generation_cols):
 
     print('MSG: generation validation passed')
 
+# EXPORT
+def export_table(df, zone, year, var_type):
+    '''
+    Exports the cleanes dataset to the corresponding clean data folder    
+    '''
+    # define clean dataset path
+    output_path = PROJECT_ROOT / 'dataset' / 'clean' / f'{var_type}'
+
+    # create folder if non-existent
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    # save in CSV format
+    df.to_csv(output_path / f'{zone}-{year}-{var_type}.csv', index=False)
+
+    print(f'MSG: {var_type} cleaned data exported to {output_path}')
+
 # MAIN CLEANING PIPELINE
 def clean_generation(zone):
     '''
     Complete cleaning pipeline for ENTSO-E generation
-    '''
-    
+    '''    
     # generation raw data
     df = load_raw_data(
         raw_dataset_path,
@@ -137,14 +198,12 @@ if __name__ == '__main__':
     # script start time execution
     start = time.time()
 
-    zone = 'IT_NORD'
-
     # script execution
-    #for zone in ZONES:
+    for zone in ZONES:
         # clean zonal prices
-    generation = clean_generation(zone)
-    # export cleaned zonal generation
-    export_table(generation, zone, var_type='generation')
+        generation = clean_generation(zone)
+        # export cleaned zonal generation
+        export_table(generation, zone, var_type='generation')
 
     # scripts end time execution
     end = time.time()
