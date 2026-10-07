@@ -13,35 +13,76 @@ raw_dataset_path = PROJECT_ROOT / 'dataset' / 'raw' / 'entsoe'
 # LOADING
 def load_raw_data(raw_data_path, dataset_type, zone, year):
     '''
-    Loads the raw ENTSO-E dataset corresponding to the selected variable 
-    type, bidding zone and year
+    Loads the raw ENTSO-E dataset corresponding to the selected 
+    dataset type, bidding zone and year
     '''
-    # read csv file from specific folder
-    df = pd.read_csv(
-        raw_data_path 
-        / f'{dataset_type}' 
-        / f'{zone}'
+    # define file path
+    file_path = (
+        raw_data_path
+        / dataset_type
+        / zone
         / f'{zone}-{year}-{dataset_type}.csv'
     )
 
-    print(f'MSG: {dataset_type} data loaded')
+    # inspect first two rows to identify MultiIndex structure
+    preview = pd.read_csv(
+        file_path,
+        header=None,
+        nrows=2
+    )
+
+    has_multiindex = (
+        len(preview) >= 2
+        and 'Actual Aggregated' in preview.iloc[1].astype(str).values
+    )
+
+    # filter 
+    if has_multiindex:
+        df = pd.read_csv(
+            file_path, 
+            header=[0, 1]
+        )
+        print(f'MSG: {zone} {year} loaded with MultiIndex structure')
+    else:
+        df = pd.read_csv(file_path)
+        print(f'MSG: {zone} {year} loaded with standard structure')
 
     return df
 
 # TRANSFORMATION
-def standardize_generation_columns(df, zone):
+def keep_actual_aggregated(df, zone, year):
     '''
-    Renames the columns of the ENTSO-E generation dataset
+    Keeps only Actual Aggregated generation series 
+    and removes the MultiIndex structure when present 
     '''
-    # rename datetime column
-    standardized_generation_df = df.rename(
-        columns={
-            'Unnamed: 0': 'datetime'
-        }
-    )
-    print(f'MSG: generation columns renamed for {zone}')
+    # identify MultiIndex structure
+    if isinstance(df.columns, pd.MultiIndex):
+        # keep datetime column
+        first_col = df.columns[0]
 
-    return standardized_generation_df
+        # get generation aggregated columns
+        aggregated_cols = (
+            df.columns.get_level_values(1) == 'Actual Aggregated'
+        )
+
+        # keep datetime column + Actual Aggregated columns
+        df = df.loc[
+            :,
+            [first_col] + list(df.columns[aggregated_cols])
+        ]
+
+        # flatten MultiIndex
+        df.columns = [
+            'datetime' if col == first_col else col[0]
+            for col in df.columns
+        ]
+        print(f'MSG: {zone} {year} - kept Actual Aggregated generation')
+    else:
+        df = df.rename(columns={df.columns[0]: 'datetime'})
+        print(f'MSG: {zone} {year} - no MultiIndex detected')
+
+    print(df.columns.tolist())
+    return df        
 
 def convert_datetime(df, datetime_col='datetime'):
     '''
@@ -54,64 +95,53 @@ def convert_datetime(df, datetime_col='datetime'):
         df[datetime_col], 
         utc=True
     )
-
+    
+    # get timezone for check
     timezone = df[datetime_col].dt.tz
 
     print(f'MSG: date column converted to datetime in {timezone} time zone')
-    
     return df
 
 def check_input_frequency(df):
     '''
-    Checks if each hour has four quart-hourly observations
+    Detects the most common time interval between observations
     '''
-    hourly_counts = (
-        df
-        .set_index('datetime')
-        .resample('h')
-        .size()
+    frequency = (
+        df['datetime']
+        .sort_values()
+        .diff()
+        .dropna()
+        .mode()
+        .iloc[0]
     )
 
-    print(f'Number of observations per hour: {hourly_counts.value_counts().sort_index()}')
+    print(f'MSG: detected input frequency: {frequency}')
+    return frequency
 
-
-def gen_to_hourly(df, datetime_col, cols=None):
+def gen_to_hourly(df):
     '''
-    Converts quarterly-hour data to hourly granularity
-    '''
-    if cols is None:
-        raise ValueError('Columns must be specified')
+    Converts generation data to hourly frequency 
 
+    Existing hourly observatoins are preserved, while sub-hourly 
+    observations are aggregated using the hourly mean
+    '''
+    # select generation columns
     df = df.copy()
-    # convert datetime to correct datatype
-    df[datetime_col] = pd.to_datetime(df[datetime_col], utc=True)
+    generation_cols = [
+        col for col in df.columns
+        if col != 'datetime'
+    ]
 
-    # convert generation columns to correct datatype
-    df[cols] = df[cols].apply(pd.to_numeric, errors='coerce')
-
-    # get missing values percentage per columns
-    missing_pct = (
-        df[cols]
-        .isna()
-        .mean()
-        .mul(100)
-        .sort_values(ascending=False)
-    )
-
-    # calculate hourly averages
+    # hourly resampling
     hourly = (
-        df
-        .set_index(datetime_col)
-        .resample('h')[cols]
+        df.set_index('datetime')[generation_cols]
+        .resample('h')
         .mean()
         .reset_index()
     )
 
-    print(missing_pct)
-    print('MSG: generation data converted to hourly frequency')
-
+    print('MSG: generation data standardized to hourly frequency')
     return hourly
-
 
 # VALIDATION
 def validate_generation(df, datetime_col, generation_cols):
@@ -141,7 +171,7 @@ def validate_generation(df, datetime_col, generation_cols):
     print('MSG: generation validation passed')
 
 # EXPORT
-def export_table(df, zone, year, var_type):
+def export_table(df, zone, var_type):
     '''
     Exports the cleanes dataset to the corresponding clean data folder    
     '''
@@ -152,46 +182,49 @@ def export_table(df, zone, year, var_type):
     output_path.mkdir(parents=True, exist_ok=True)
 
     # save in CSV format
-    df.to_csv(output_path / f'{zone}-{year}-{var_type}.csv', index=False)
+    df.to_csv(output_path / f'{zone}-{var_type}.csv', index=False)
 
     print(f'MSG: {var_type} cleaned data exported to {output_path}')
 
 # MAIN CLEANING PIPELINE
 def clean_generation(zone):
-    '''
-    Complete cleaning pipeline for ENTSO-E generation
-    '''    
-    # generation raw data
-    df = load_raw_data(
-        raw_dataset_path,
-        dataset_type='generation',
-        zone=zone
-    )
-    
-    # standardize columns
-    df = standardize_generation_columns(df, zone)
-    
-    # convert datetime
-    df = convert_datetime(df)
+    # array for final concatenation
+    yearly_data = []
 
-    # check frequency
-    check_input_frequency(df)
-    
-    # convert to hourly frequency
-    df = gen_to_hourly(
-        df,
-        datetime_col='datetime',
-        cols=df.columns[1:]
-    )
-    
-    # validate cleaned data
-    validate_generation(
-        df,
-        datetime_col='datetime',
-        generation_cols=df.columns.drop('datetime')
-    )
+    for year in YEARS:
+        df = load_raw_data(
+            raw_dataset_path,
+            dataset_type='generation',
+            zone=zone,
+            year=year
+        )
 
-    return df
+        df = keep_actual_aggregated(
+            df,
+            zone,
+            year
+        )
+
+        df = convert_datetime(df)
+
+        yearly_data.append(df)
+
+    # concatenate all years
+    generation = pd.concat(
+        yearly_data,
+        axis=0,
+        ignore_index=True,
+        sort=False
+    )
+    print(f'MSG: {zone} yearly generation datasets concatenated')
+
+    check_input_frequency(generation)
+
+    generation = gen_to_hourly(generation)
+
+    validate_generation(generation, 'datetime', generation.columns[1:])
+
+    return generation
 
 # EXECUTION
 if __name__ == '__main__':
