@@ -4,6 +4,6 @@ Scripts plan:
 x cleaning_utils.py
 x prices_cleaner.py         
 x load_cleaner.py
-   generation_cleaner.py
-   validate.py
+* generation_cleaner.py
+* validate.py
    build_dataset.py

@@ -1,0 +1,241 @@
+MSG: "config.py" executed
+
+_____________IT_NORD VALIDATION_____________
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime
+0 days 01:00:00    103112
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Biomass                                26
+Fossil Gas                             25
+Fossil Oil                             29
+Hydro Pumped Storage                33786
+Hydro Run-of-river and poundage        25
+Hydro Water Reservoir                  25
+Other                                  25
+Solar                                   1
+Waste                               15421
+Wind Onshore                           30
+Fossil Hard coal                    22154
+Fossil Coal-derived gas             34776
+Geothermal                          97496
+Energy storage                      92949
+Other renewable                    100124
+dtype: int64
+
+MSG: dataset validation completed
+
+_____________IT_CNOR VALIDATION_____________
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime
+0 days 01:00:00    103112
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Biomass                               26
+Fossil Coal-derived gas            68076
+Fossil Gas                            26
+Fossil Hard coal                   59224
+Fossil Oil                         16122
+Geothermal                            26
+Hydro Pumped Storage               70145
+Hydro Run-of-river and poundage       25
+Hydro Water Reservoir                 26
+Other                                 26
+Solar                                  1
+Wind Onshore                           8
+Waste                              87754
+Energy storage                     90312
+Other renewable                    99272
+dtype: int64
+
+MSG: dataset validation completed
+
+_____________IT_CSUD VALIDATION_____________
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime
+0 days 01:00:00    103094
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Biomass                               26
+Fossil Coal-derived gas            74654
+Fossil Gas                            47
+Fossil Hard coal                     121
+Fossil Oil                           489
+Hydro Pumped Storage               39220
+Hydro Run-of-river and poundage       25
+Hydro Water Reservoir                 28
+Other                                 40
+Solar                                  3
+Waste                              70696
+Wind Onshore                           8
+Geothermal                         97477
+Energy storage                     91823
+Other renewable                    99626
+dtype: int64
+
+MSG: dataset validation completed
+
+_____________IT_SUD VALIDATION_____________
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime
+0 days 01:00:00    103095
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Biomass                               25
+Fossil Gas                            26
+Hydro Run-of-river and poundage       26
+Hydro Water Reservoir                 26
+Other                                 26
+Solar                                  2
+Waste                              35180
+Fossil Coal-derived gas            35334
+Fossil Hard coal                   35443
+Fossil Oil                         41871
+Wind Offshore                      64847
+Geothermal                         97479
+dtype: int64
+
+MSG: dataset validation completed
+
+_____________IT_CALA VALIDATION_____________
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime
+0 days 01:00:00    50511
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Hydro Water Reservoir    42064
+Waste                     4624
+Geothermal               44895
+Fossil Hard coal         50397
+Fossil Oil               50397
+dtype: int64
+
+MSG: dataset validation completed
+
+_____________IT_SICI VALIDATION_____________
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime
+0 days 01:00:00    103094
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Biomass                                26
+Fossil Coal-derived gas              6623
+Fossil Gas                             25
+Fossil Oil                             26
+Hydro Pumped Storage                16065
+Hydro Run-of-river and poundage        26
+Hydro Water Reservoir               59298
+Other                                  32
+Solar                                   2
+Wind Onshore                          168
+Geothermal                          97478
+Energy storage                      89423
+Fossil Hard coal                   102980
+Other renewable                     98620
+Waste                              102980
+dtype: int64
+
+MSG: dataset validation completed
+
+_____________IT_SARD VALIDATION_____________
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime
+0 days 01:00:00    103094
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Biomass                                26
+Fossil Hard coal                       26
+Fossil Oil                           2710
+Hydro Pumped Storage                44770
+Hydro Run-of-river and poundage        27
+Hydro Water Reservoir                  26
+Other                                  27
+Solar                                2656
+Wind Onshore                            3
+Fossil Coal-derived gas             34776
+Geothermal                          97478
+Energy storage                      92644
+Fossil Gas                         102980
+Other renewable                     99497
+Waste                              102980
+dtype: int64
+
+MSG: dataset validation completed
+Execution time: 3.6044466495513916
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime_UTC
+0 days 01:00:00    100774
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Calabria            52608
+Montenegro          35064
+Grecia Coupling     43824
+Italia  Coupling    52608
+dtype: int64
+
+MSG: dataset validation completed
+Execution time: 0.8780961036682129
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime_UTC
+0 days 01:00:00    100774
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Calabria    56951
+dtype: int64
+
+MSG: dataset validation completed
+Execution time: 0.7033584117889404

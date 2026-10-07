@@ -8,18 +8,18 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 # variables for ENTSO-E API requests
-START_YEAR = 2021
+START_YEAR = 2015
 END_YEAR = 2026
 COUNTRY_CODE = 'IT'
 TIMEZONE = 'Europe/Rome'
 ZONES = [
-    #'IT_NORD'
-    #'IT_CNOR'
-    #'IT_CSUD'
-    #'IT_SUD'  # no MultiIndex for download
-    'IT_CALA' # no MultiIndex for downlaad
-    #'IT_SICI',
-    #'IT_SARD'
+    'IT_NORD',
+    'IT_CNOR',
+    'IT_CSUD',
+    'IT_SUD',  # no MultiIndex for download
+    'IT_CALA', # no MultiIndex for downlaad
+    'IT_SICI',
+    'IT_SARD'
 ]
 
 # other
