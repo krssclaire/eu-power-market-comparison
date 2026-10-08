@@ -41,10 +41,6 @@ for country_code in country_codes:
         #print(f'{year} {country_code} LOAD data retrieved')
         generation = client.query_generation(country_code, start=start, end=end)
         print(f'{year} {country_code} GENERATION data retrieved')
-        
-        # keep only actual aggregated generation --> comment for non Multiindex aggregation datasets
-        #generation = generation.xs("Actual Aggregated", axis=1, level=1)
-        #print(f'{country_code} GENERATION Actual Aggregated kept')
 
         # save locally to csv
         #prices.to_csv(f'{raw_dataset_path}/prices/{country_code}/{country_code}-{year}-prices.csv')

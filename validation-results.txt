@@ -1,5 +1,3 @@
-MSG: "config.py" executed
-
 _____________IT_NORD VALIDATION_____________
 MSG: datetime validation passed
 MSG: duplicate timestamp check passed
@@ -239,3 +237,70 @@ dtype: int64
 
 MSG: dataset validation completed
 Execution time: 0.7033584117889404
+
+
+_____________IT VALIDATION_____________
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime
+0 days 01:00:00    103122
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Biomass                               26
+Fossil Coal-derived gas             7519
+Fossil Gas                           171
+Fossil Hard coal                     673
+Fossil Oil                          2886
+Geothermal                          8173
+Hydro Pumped Storage                8732
+Hydro Run-of-river and poundage       26
+Hydro Water Reservoir               2138
+Other                               2402
+Solar                                 26
+Waste                               4749
+Wind Onshore                          34
+Wind Offshore                      64847
+Energy storage                     92874
+Other renewable                    98614
+dtype: int64
+
+MSG: dataset validation completed
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime_UTC
+0 days 01:00:00    100774
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Calabria            52608
+Montenegro          35064
+Grecia Coupling     43824
+Italia  Coupling    52608
+dtype: int64
+
+MSG: dataset validation completed
+MSG: datetime validation passed
+MSG: duplicate timestamp check passed
+MSG: datetime sorting check passed
+
+--- OBSERVED FREQUENCIES ---
+datetime_UTC
+0 days 01:00:00    100774
+Name: count, dtype: int64
+MSG: frequency validation passed
+
+--- MISSING VALUES ---
+Calabria    56951
+dtype: int64
+
+MSG: dataset validation completed
+Execution time: 3.05543851852417

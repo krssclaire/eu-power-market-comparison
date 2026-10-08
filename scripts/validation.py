@@ -168,25 +168,27 @@ def validate_dataset(df, datetime_col, check_numeric=False):
     print('\nMSG: dataset validation completed')
 
 # EXECUTION
-types = ['generation', 'prices', 'load']
 
-for var_type in types:
+if __name__ == '__main__':
     # script execution measure
     start = time.time()
+    
+    types = ['generation', 'prices', 'load']
 
-    # filter by variable type
-    if var_type == 'generation':
-        datetime_column = 'datetime'
-        for zone in ZONES:
-            print(f'\n_____________{zone} VALIDATION_____________')
-            df = load_clean_data(clean_data_path, var_type, zone)
+    for var_type in types:
+        # filter by variable type
+        if var_type == 'generation':
+            datetime_column = 'datetime'
+            for zone in ZONES:
+                print(f'\n_____________{zone} VALIDATION_____________')
+                df = load_clean_data(clean_data_path, var_type, zone)
+                validate_dataset(df, datetime_column)
+        else:
+            datetime_column = 'datetime_UTC'
+            df = load_clean_data(clean_data_path, var_type, None)
             validate_dataset(df, datetime_column)
-    else:
-        datetime_column = 'datetime_UTC'
-        df = load_clean_data(clean_data_path, var_type, None)
-        validate_dataset(df, datetime_column)
 
-    # scripts end time execution
+        # scripts end time execution
     end = time.time()
     # print time of script execution
     print(f'Execution time: {end - start}')

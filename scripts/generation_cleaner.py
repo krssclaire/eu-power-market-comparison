@@ -173,7 +173,7 @@ def validate_generation(df, datetime_col, generation_cols):
 # EXPORT
 def export_table(df, zone, var_type):
     '''
-    Exports the cleanes dataset to the corresponding clean data folder    
+    Exports the cleaned dataset to the corresponding clean data folder    
     '''
     # define clean dataset path
     output_path = PROJECT_ROOT / 'dataset' / 'clean' / f'{var_type}'
