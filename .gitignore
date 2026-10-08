@@ -1,8 +1,8 @@
 # permanent to ignore
 .venv
 .env
+.vscode
 dataset/raw
+scripts/__pycache__
 
 # temporary to ignore
-entso-eda.ipynb
-entsoe_data.csv
