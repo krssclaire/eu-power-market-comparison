@@ -343,7 +343,7 @@ def export_processed_dataset(df, zone):
 
 
 # EXECUTION
-'''
+
 # national case
 generation = load_clean_data(clean_data_path, 'generation', COUNTRY_CODE)
 prices = load_clean_data(clean_data_path, 'prices', None)
@@ -352,8 +352,8 @@ check_compatibility(prices, load, generation)
 national_df = build_national_dataset(prices, load, generation)
 
 export_processed_dataset(national_df, COUNTRY_CODE)
-'''
 
+'''
 # zonal case
 prices = load_clean_data(clean_data_path, 'prices', None)
 load = load_clean_data(clean_data_path, 'load', None)
@@ -363,3 +363,4 @@ for zone in ZONES:
     check_compatibility(prices, load, generation)
     zonal_df = build_zonal_dataset(prices, load, generation,zone, ZONE_MAPPING)
     export_processed_dataset(zonal_df, zone)
+'''
